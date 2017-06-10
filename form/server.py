@@ -1,9 +1,27 @@
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect,session
 app=Flask(__name__)
+app.secret_key='secret'
 
 @app.route('/')
 def index():
-	return render_template("index.html")
+	if not 'hits' in session:
+		session['hits']=0
+	session['hits']+=1
+	print 'HITS: ' + str(session['hits'])
+	return render_template("index.html")#,hits=session['hits'])
+
+@app.route('/hitsinc',methods=['POST'])
+def inchits():
+	session['hits']+=1
+	return redirect('/')
+
+@app.route('/hitsreset',methods=['POST'])
+def resethits():
+	session['hits']=0
+	return redirect('/')
+
+
+
 
 @app.route('/process', methods=['POST'])
 def proc():
@@ -25,30 +43,31 @@ def ninja(color):
 	return render_template('ninja.html',link="/static/Ninjas/"+ret)
 		
 
-@app.route('/dojos/new')
-def dn():
-	return render_template("dojos.html")
 
-@app.route('/users',methods=['POST'])
+@app.route('/reg', methods=['POST'])
+def register():
+	return render_template('reg.html')
+
+@app.route('/user',methods=['POST'])
 def create_user():
 	print "New User:"
 
-	name = request.form['name']
-	email = request.form['email']
+	session['name'] = request.form['name']
+	session['pswd'] = request.form['pswd']
 
-	print "   Name: " + name
-	print "   Email: " + email
-	print request.form
+
+	prtpwd = ''
+	for i in range(0,len(session['pswd'])):
+		prtpwd+='*'
+
+
+	print "   Name: " + session['name']
+	print "   pass: " + prtpwd
 
 	return redirect('/')
 
-@app.route('/users/<username>')
-def show_usr(username):
-	print username
-	return render_template("usr.html")
 
-@app.route('/times')
-def times():
-	return render_template("times.html", h="hello",t=5)
+
+
 
 app.run(debug=True)
