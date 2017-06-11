@@ -25,9 +25,12 @@ def resethits():
 
 @app.route('/random')
 def rand():
-	if not 'rand' in session:
-		session['rand']=random.randrange(0,101)
+	session['rand']=50#random.randrange(0,101)
 	return render_template('rand.html',answer='none')
+#@app.route('/random',methods=['POST'])
+#def randc(ans):
+#	session['rand']=40#random.randrange(0,101)
+#	return render_template('rand.html',answer=ans)
 
 @app.route('/random',methods=['POST'])
 def randchk():
@@ -39,11 +42,6 @@ def randchk():
 	else:
 		rettext='low'
 	return render_template('rand.html',answer=rettext)
-
-@app.route('/resetrand',methods=['POST'])
-def resetrand():
-	session.pop('rand')
-	return redirect('/random')
 
 
 @app.route('/process', methods=['POST'])

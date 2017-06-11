@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>random game!</title>
+		<link rel='stylesheet' type='text/css' href='{{url_for("static",filename="sty.css")}}'>
+	</head>
+	<body>
+		<h1>Welcome to the great number game!</h1>
+		<p>I am thinking of a number between 1 and 100</p>
+		<p>Take a guess!</p>
+
+		{% if answer == 'right' %}
+			<div class='green'><h3>You're right!</h3></div>
+			<form action='/resetrand' method='post'>
+				<input type='submit' value='submit'>
+			</form>
+		{% elif not answer == 'none' %}
+			<div class='red'><h3>Too {{answer}}!</h3></div>
+		{% endif %}
+
+		{% if not answer == 'right' %}
+			<form action='/random' method='post'>
+				<input type='text' name='answer'>
+				<input type='submit' value='submit'>
+			</form>
+		{% endif %}
+	</body>
+</html>
