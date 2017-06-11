@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,redirect,session
+from flask import Flask,render_template,request,redirect,session,flash
 import random
 
 app=Flask(__name__)
@@ -44,6 +44,48 @@ def randchk():
 def resetrand():
 	session.pop('rand')
 	return redirect('/random')
+
+
+@app.route('/ninjamoney')
+def ninjamoney():
+	session['wealth']=0
+	session['log']=''
+	session['css']=random.randrange(0,10000000000000000000)
+	return redirect('/ninjamoneygame')
+
+@app.route('/ninjamoneygame')
+def ninjamoneygame():
+	return render_template('ninjamoney.html',gold=session['wealth'],log=session['log'])
+
+@app.route('/process_action',methods=['POST'])
+def processaction():
+	addmoney=0#random.randrange(0, 101)
+	action=request.form['building']
+
+	if action == 'farm':
+		addmoney = random.randrange(10,20)
+	elif action == 'cave':
+		addmoney = random.randrange(5,10)
+	elif action == 'house':
+		addmoney = random.randrange(2,5)
+	elif action == 'casino':
+		r = random.randrange(0,2)
+		print r
+		if r:
+			addmoney = random.randrange(0,50)
+		else:
+			addmoney = - random.randrange(0,50)
+
+	session['log']+="Earned "
+	session['log']+=str(addmoney)
+	session['log']+=" golds from the "
+	session['log']+=action
+	session['log']+="!"
+	session['log']+='\n'
+	print session['log']
+
+	session['wealth']+=addmoney
+	return redirect('/ninjamoneygame')
 
 
 @app.route('/process', methods=['POST'])

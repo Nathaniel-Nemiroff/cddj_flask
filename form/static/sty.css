@@ -1,3 +1,20 @@
 body{text-align:center;}
 .green{background-color:green;padding:100px;}
 .red{background-color:red;padding:100px;}
+
+.activity{
+	width:20%;
+	border-style:solid;
+	background-color:yellow;
+	display:inline-block;
+	padding:10px;
+}
+#game{list-style:none;text-align:left;display:block;}
+.activities{
+	display:block;
+}
+.activities textarea{
+	vertical-align:top;
+	width:50%;
+	height:100px;
+}

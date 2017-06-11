@@ -1,0 +1,46 @@
+<html>
+	<head><title>ninja money game!</title>
+		<!--<link rel='stylesheet' type='text/css' href='{{url_for("static",filename="sty.css")}}'>-->
+		<link rel='stylesheet' href='/static/sty.css?q={{session["css"]}}' type='text/css' media='screen'>
+	<body>
+		Your Gold: <input type='text' value={{gold}}>
+	<ul id=game>
+		<li class='activity'>
+			<h3>Farm</h3>
+			<p>(earns 10-20 golds)</p>
+			<form action='/process_action' method='post'>
+				<input type='hidden' name='building' value='farm'>
+				<input type=submit value='Find Gold'>
+			</form>
+		</li>
+		<li class='activity'>
+			<h3>Cave</h3>
+			<p>(earns 5-10 golds)</p>
+			<form action='/process_action' method='post'>
+				<input type='hidden' name='building' value='cave'>
+				<input type=submit value='Find Gold'>
+			</form>
+		</li>
+		<li class='activity'>
+			<h3>House</h3>
+			<p>(earns 2-5 golds)</p>
+			<form action='/process_action' method='post'>
+				<input type='hidden' name='building' value='house'>
+				<input type=submit value='Find Gold'>
+			</form>
+		</li>
+		<li class='activity'>
+			<h3>Casino</h3>
+			<p>(earns/takes 0-50 golds)</p>
+			<form action='/process_action' method='post'>
+				<input type='hidden' name='building' value='casino'>
+				<input type=submit value='Find Gold'>
+			</form>
+		</li>
+	</ul>
+		<div class=activities>
+			Activities:
+				<textarea value="">{{session['log']}}</textarea>
+		</div>
+	</body>
+</html>
