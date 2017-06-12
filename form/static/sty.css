@@ -1,6 +1,7 @@
 body{text-align:center;}
 .green{background-color:green;padding:100px;}
 .red{background-color:red;padding:100px;}
+.redtext{color:red;}
 
 .activity{
 	width:20%;

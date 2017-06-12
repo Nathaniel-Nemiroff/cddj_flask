@@ -1,9 +1,20 @@
 <html>
 	<body>	
-		<form action='/user' method='post'>
-			User name:<input type='text' name='name'>
-			Password :<input type='password' name='pswd'>
-			<input type='submit' value='submit'>
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+					<p class=redtext>{{message}}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+		<form action='/register' method='post'>
+			<p>Email           :<input type='text' name='email'></p>	
+			<p>First Name      :<input type='text' name='first'></p>
+			<p>Last Name       :<input type='text' name='last'></p>
+			<p>Password        :<input type='text' name='pass'></p>
+			<p>Confirm Password:<input type='text' name='conf'></p>
+			<p>Birthday        :<input type='text' name='bday'></p>
+			<p><input type='submit' value='submit'></p>
 		</form>
 	</body>
 </html>

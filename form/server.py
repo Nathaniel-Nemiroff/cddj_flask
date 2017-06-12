@@ -1,11 +1,15 @@
 from flask import Flask,render_template,request,redirect,session,flash
-import random
+import random,re,datetime
+
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+BDAY_REGEX = re.compile(r'[0-9][0-9]/[0-9][0-9]/[0-9][0-9]')
 
 app=Flask(__name__)
 app.secret_key='secret'
 
 @app.route('/')
 def index():
+	session['regvld']=""
 	if not 'hits' in session:
 		session['hits']=0
 	session['hits']+=1
@@ -110,26 +114,82 @@ def ninja(color):
 
 
 @app.route('/reg', methods=['POST'])
+def reg():
+	session['css']='sty.css?q='+str(random.randrange(0,10000000000000000000))
+	session['reg']=False
+	
+	return redirect('/register', code=307)
+
+@app.route('/register', methods=['POST'])
 def register():
-	return render_template('reg.html')
+
+	if not session['reg']:
+		session['reg']=True
+		return render_template('reg.html')
+
+	email = request.form['email']
+	first = request.form['first']
+	last = request.form['last']
+	pswd = request.form['pass']
+	conf = request.form['conf']
+
+	check=True
+	for itm in request.form:
+		print request.form[itm]
+		if len(request.form[itm]) < 1:
+			flash('Cannot leave any feild empty!')
+			check=False
+	if not EMAIL_REGEX.match(request.form['email']):
+		flash('Submit a valid email!')
+		check=False
+	if(re.search(r'\d', first)):
+		flash('First name cannot contain numbers!')
+		check=False
+	if(re.search(r'\d', last)):
+		flash('Last name cannot contain numbers!')
+		check=False
+	if len(pswd) < 8:
+		flash('Password must be at least 8 characters long!')
+		check=False
+	if not re.search(r'\d',pswd):
+		flash('Password must have at least one number!')
+		check=False	
+	if pswd.islower():
+		flash('Password must have at least one capital letter!')
+		check=False
+	if not pswd==conf:
+		flash('Passwords must match!')
+		check=False
+
+	date = 0
+	now = datetime.datetime.now()
+
+	if not BDAY_REGEX.match(request.form['bday']):
+		flash('Date must be valid (mm/dd/yy)')
+		check=False
+	else:
+		date = datetime.datetime.strptime(request.form['bday'],"%m/%d/%y")
+		if date.year > 2017:
+			flash('Date must not be after today!')
+			check=False
+		elif date.year == 2017:
+			if date.month > now.month:
+				flash('Date must not be after today!')
+				check=False
+			elif date.month == now.month:
+				if date.day > now.day:
+					flash('Date must not be after today!')
+					check=False
+	
+
+	if not check:
+		return render_template('reg.html')
+	return redirect('/user',code=307)
 
 @app.route('/user',methods=['POST'])
-def create_user():
-	print "New User:"
+def create_user():	
 
-	session['name'] = request.form['name']
-	session['pswd'] = request.form['pswd']
-
-
-	prtpwd = ''
-	for i in range(0,len(session['pswd'])):
-		prtpwd+='*'
-
-
-	print "   Name: " + session['name']
-	print "   pass: " + prtpwd
-
-	return redirect('/')
+	return render_template('usr.html')
 
 
 

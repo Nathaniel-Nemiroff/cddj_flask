@@ -1,6 +1,6 @@
 <html>
 	<head><title>form test</title></head>
-	<link rel='stylesheet' type='text/css' href='{{url_for("static",filename="globlestyle.css")}}'>
+	<link rel='stylesheet' type='text/css' href='{{url_for("static",filename="sty.css")}}'>
 	<!--<script type='text/javascript' src='{{url_for("static",filename="globlescript.js")}}'></script>-->
 	<body>
 		<p>Welcome {{session['name']}}</p>
@@ -9,13 +9,10 @@
 		<p>please navigate to localhost:5000/ninjamoney for the gold coin game</p>
 		<!--<p>(number of hits={{g}})</p>-->
 		<form action='/reg' method='post'>
-			<input type=submit value='register'>
+			<input type=submit value='Click here for Survey'>
 		</form>
 		<form action='/hitsinc' method='post'>
 			<input type=submit value='increment'>
-		</form>
-		<form action='/hitsreset' method='post'>
-			<input type=submit value='reset'>
 		</form>
 
 
